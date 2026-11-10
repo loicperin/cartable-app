@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cartable</title>
+<meta name="description" content="Installe le Cartable comme une application : une icône dans ta barre des tâches et une fenêtre à lui.">
+<meta name="theme-color" content="#1D6B52">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/cartable-32.png">
+<link rel="apple-touch-icon" href="icons/cartable-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cartable">
+<script>
+  /* Dans la fenêtre de l'application installée (ou avec ?ouvrir), on file tout de suite au Cartable. */
+  (function () {
+    var APP_URL = 'https://claude.ai/artifact/WYsnCndyYqQkBEfHKr2hmc';
+    var q = location.search;
+    var mm = function (m) { try { return matchMedia('(display-mode: ' + m + ')').matches; } catch (e) { return false; } };
+    var app = mm('standalone') || mm('minimal-ui') || mm('window-controls-overlay') || mm('fullscreen') || navigator.standalone === true;
+    if (app || /[?&](ouvrir|source=app)\b/.test(q)) {
+      document.documentElement.className = 'go';
+      location.replace(APP_URL);
+    }
+    window.APP_URL = APP_URL;
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+  :root {
+    --bg: #F3F5F1; --surface: #FFFFFF; --ink: #142019; --ink-2: #3D4A43; --muted: #66746C; --line: #DCE3DD;
+    --pri: #1D6B52; --pri-ink: #FFFFFF; --pri-soft: #E3EFE9; --grid: rgba(29, 107, 82, .07); --hl: #FFE24A;
+    --shadow: 0 1px 2px rgba(20, 32, 25, .05), 0 24px 60px -24px rgba(20, 32, 25, .25);
+    --f-display: "Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --f-body: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D1612; --surface: #15211B; --ink: #E6EFE9; --ink-2: #B5C4BB; --muted: #8C9C93; --line: #26352D;
+      --pri: #5FCB9F; --pri-ink: #0D1612; --pri-soft: #1B3328; --grid: rgba(95, 203, 159, .06);
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 24px 60px -24px rgba(0, 0, 0, .7);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D1612; --surface: #15211B; --ink: #E6EFE9; --ink-2: #B5C4BB; --muted: #8C9C93; --line: #26352D;
+    --pri: #5FCB9F; --pri-ink: #0D1612; --pri-soft: #1B3328; --grid: rgba(95, 203, 159, .06);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 24px 60px -24px rgba(0, 0, 0, .7);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background-color: var(--bg); color: var(--ink); font: 16px/1.55 var(--f-body);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 22px 22px; display: grid; place-items: center; min-height: 100vh; min-height: 100dvh;
+    padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  }
+  .splash { display: none; }
+  html.go .page { display: none; }
+  html.go .splash { display: grid; justify-items: center; gap: 14px; color: var(--muted); font-weight: 600; }
+  html.go .splash img { width: 88px; height: 88px; animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 50% { transform: scale(.94); opacity: .8; } }
+
+  .page { width: 100%; max-width: 540px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 26px; box-shadow: var(--shadow); padding: 34px 32px 28px; }
+  .head { display: flex; align-items: center; gap: 16px; }
+  .head img { width: 72px; height: 72px; flex: none; border-radius: 19px; box-shadow: 0 10px 24px -12px rgba(29, 107, 82, .7); }
+  h1 { margin: 0; font: 800 34px/1.05 var(--f-display); letter-spacing: -.03em; }
+  .tag { margin: 4px 0 0; color: var(--muted); font-size: 14.5px; }
+  .lead { margin: 22px 0 0; color: var(--ink-2); font-size: 16.5px; }
+  .lead mark { background: linear-gradient(transparent 55%, var(--hl) 55%); color: inherit; padding: 0 2px; }
+  :root[data-theme="dark"] .lead mark { background: linear-gradient(transparent 55%, rgba(255, 226, 74, .35) 55%); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lead mark { background: linear-gradient(transparent 55%, rgba(255, 226, 74, .35) 55%); } }
+
+  .cta { margin-top: 24px; display: grid; gap: 10px; }
+  .btn { appearance: none; border: 0; border-radius: 14px; padding: 15px 22px; font: 700 17px/1.2 var(--f-body); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; transition: transform .12s, box-shadow .2s, background .2s; }
+  .btn svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .btn.pri { background: var(--pri); color: var(--pri-ink); box-shadow: 0 10px 24px -12px var(--pri); }
+  .btn.pri:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -12px var(--pri); }
+  .btn.pri:active { transform: none; }
+  .btn.ghost { background: transparent; color: var(--pri); padding: 10px 14px; font-size: 15px; font-weight: 650; }
+  .btn.ghost:hover { background: var(--pri-soft); }
+  .btn:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+  .status { margin: 2px 0 0; min-height: 1.5em; text-align: center; color: var(--muted); font-size: 14px; }
+
+  .box { margin-top: 18px; border-radius: 18px; background: var(--pri-soft); padding: 18px 20px; }
+  .box[hidden] { display: none; }
+  .box h2 { margin: 0 0 8px; font: 750 17px/1.25 var(--f-display); letter-spacing: -.01em; }
+  .box ol { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+  .box p { margin: 6px 0 0; }
+  .box b { font-weight: 700; }
+  .ok h2::before { content: "✓"; display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 8px; border-radius: 50%;
+    background: var(--pri); color: var(--pri-ink); font-size: 14px; vertical-align: 1px; }
+  kbd { font: 600 13px/1 ui-monospace, "SF Mono", Consolas, monospace; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); }
+
+  .steps { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .steps li { border: 1px dashed var(--line); border-radius: 16px; padding: 12px; font-size: 13.5px; color: var(--ink-2); line-height: 1.35; }
+  .steps b { display: block; font: 800 22px/1 var(--f-display); color: var(--pri); margin-bottom: 6px; }
+  .foot { margin: 18px 4px 0; text-align: center; color: var(--muted); font-size: 13.5px; }
+  .foot a { color: inherit; }
+  @media (max-width: 480px) {
+    .card { padding: 26px 20px 22px; border-radius: 22px; }
+    h1 { font-size: 30px; }
+    .head img { width: 60px; height: 60px; border-radius: 16px; }
+    .steps { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="splash" role="status"><img src="icons/cartable-192.png" alt="">Ouverture du Cartable…</div>
+
+<div class="page">
+  <main class="card">
+    <div class="head">
+      <img src="icons/cartable-192.png" alt="">
+      <div>
+        <h1>Cartable</h1>
+        <p class="tag">Tes cours, tes notes et ta trousse, au même endroit.</p>
+      </div>
+    </div>
+    <p class="lead">Installe-le comme une vraie application&nbsp;: <mark>une icône dans ta barre des tâches</mark>, une fenêtre à lui, et il s’ouvre directement sur tes cours.</p>
+
+    <div class="cta">
+      <button class="btn pri" id="install" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+        <span>Installer le Cartable</span>
+      </button>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </div>
+
+    <section class="box" id="how" hidden></section>
+
+    <section class="box ok" id="done" hidden>
+      <h2>Le Cartable est installé</h2>
+      <p id="pin"></p>
+    </section>
+
+    <ol class="steps" aria-label="En trois étapes">
+      <li><b>1</b>Installe-le avec le bouton ci-dessus.</li>
+      <li><b>2</b>Épingle son icône à ta barre des tâches.</li>
+      <li><b>3</b>Un clic, et tu retrouves tes cours.</li>
+    </ol>
+  </main>
+  <p class="foot">Il faut être connecté à ton compte Claude dans ce navigateur. <a id="open" href="#">Ouvrir le Cartable sans l’installer</a></p>
+</div>
+
+<script>
+(function () {
+  if (document.documentElement.className === 'go') return;
+  var $ = function (s) { return document.querySelector(s); };
+  $('#open').href = window.APP_URL;
+
+  var ua = navigator.userAgent || '';
+  var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var android = /Android/.test(ua);
+  var edge = /Edg(e|A|iOS)?\//.test(ua);
+  var firefox = /Firefox\/|FxiOS/.test(ua);
+  var samsung = /SamsungBrowser/.test(ua);
+  var chromium = /Chrome\/|CriOS/.test(ua) && !edge;
+  var safari = /Safari\//.test(ua) && !chromium && !edge && !firefox;
+  var mac = /Macintosh/.test(ua) && !ios;
+  var win = /Windows/.test(ua);
+
+  var evt = null, installed = false;
+  var btn = $('#install'), status = $('#status'), how = $('#how'), done = $('#done');
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+  function pinText() {
+    if (ios || android) return 'Son icône est sur ton écran d’accueil : touche-la pour ouvrir le Cartable.';
+    if (mac) return 'Il est dans ton Dock tant qu’il est ouvert. Pour l’y garder : clic droit sur son icône → <b>Options</b> → <b>Garder dans le Dock</b>.';
+    if (edge) return 'Si tu as coché <b>Épingler à la barre des tâches</b>, c’est fait. Sinon : clic droit sur l’icône du Cartable dans la barre des tâches → <b>Épingler à la barre des tâches</b>.';
+    return 'Il s’ouvre dans sa propre fenêtre. Pour le garder : clic droit sur son icône dans la barre des tâches → <b>Épingler à la barre des tâches</b>.';
+  }
+  function steps() {
+    if (ios) return '<h2>Sur iPhone et iPad</h2><ol><li>Touche le bouton <b>Partager</b> (le carré avec une flèche vers le haut).</li><li>Choisis <b>Sur l’écran d’accueil</b>.</li><li>Laisse le nom « Cartable » et touche <b>Ajouter</b>.</li></ol>';
+    if (android && samsung) return '<h2>Samsung Internet</h2><ol><li>Touche le menu <b>≡</b>.</li><li><b>Ajouter la page à</b> → <b>Écran d’accueil</b>.</li></ol>';
+    if (android) return '<h2>Sur Android</h2><ol><li>Touche le menu <b>⋮</b> en haut à droite.</li><li>Choisis <b>Installer l’application</b> (ou <b>Ajouter à l’écran d’accueil</b>).</li><li>Confirme avec <b>Installer</b>.</li></ol>';
+    if (firefox) return '<h2>Firefox n’installe pas les applications web</h2><p>Ouvre cette page dans <b>Chrome</b> ou <b>Edge</b> (connecté à ton compte Claude), puis clique sur <b>Installer le Cartable</b>.</p>';
+    if (safari && mac) return '<h2>Safari sur Mac</h2><ol><li>Menu <b>Fichier</b> → <b>Ajouter au Dock…</b></li><li>Laisse le nom « Cartable » et clique sur <b>Ajouter</b>.</li></ol>';
+    if (edge) return '<h2>Microsoft Edge</h2><ol><li>Clique sur l’icône <b>Installer</b> à droite de la barre d’adresse, ou menu <b>…</b> → <b>Applications</b> → <b>Installer ce site en tant qu’application</b>.</li><li>Clique sur <b>Installer</b>, puis coche <b>Épingler à la barre des tâches</b>.</li></ol>';
+    return '<h2>Google Chrome</h2><ol><li>Clique sur l’icône <b>Installer</b> (un écran avec une flèche) à droite de la barre d’adresse,<br>ou menu <b>⋮</b> → <b>Caster, enregistrer et partager</b> → <b>Installer la page en tant qu’application</b>.</li><li>Clique sur <b>Installer</b>.</li></ol>';
+  }
+  function showDone() {
+    installed = true; store.set('cartable-installe', '1');
+    $('#pin').innerHTML = pinText(); done.hidden = false; how.hidden = true;
+    btn.querySelector('span').textContent = 'Ouvrir le Cartable'; status.textContent = '';
+  }
+  function showSteps() { how.innerHTML = steps(); how.hidden = false; how.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); evt = e;
+    if (!installed) status.textContent = 'Un clic, puis confirme avec « Installer ».';
+  });
+  window.addEventListener('appinstalled', function () { evt = null; showDone(); });
+
+  btn.addEventListener('click', function () {
+    if (installed) { location.href = window.APP_URL; return; }
+    if (!evt) { showSteps(); return; }
+    var e = evt; evt = null;
+    e.prompt();
+    e.userChoice.then(function (r) {
+      if (r && r.outcome === 'accepted') showDone();
+      else status.textContent = 'Pas de souci : le bouton reste là si tu changes d’avis.';
+    }).catch(function () { showSteps(); });
+  });
+
+  // L'invite du navigateur arrive en général en moins d'une seconde ; sinon on affiche les gestes à faire.
+  setTimeout(function () {
+    if (evt || installed) return;
+    if (store.get('cartable-installe') === '1' && !ios) status.innerHTML = 'Déjà installé ? Cherche « Cartable » dans le menu Démarrer ou le Launchpad.';
+    else if (ios || firefox || (safari && mac)) { btn.querySelector('span').textContent = 'Voir comment l’installer'; showSteps(); }
+  }, 1500);
+
+  // Ouverte depuis un cadre restreint (origine « null »), la page ne peut pas être installée : on le dit clairement.
+  if (window.origin === 'null') {
+    status.innerHTML = 'Cette page s’est ouverte dans un cadre limité. Copie son adresse (<b>' + location.host + location.pathname + '</b>) dans un nouvel onglet, puis clique sur « Installer ».';
+    return;
+  }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+})();
+</script>
+</body>
+</html>

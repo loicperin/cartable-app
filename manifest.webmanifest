@@ -1,0 +1,19 @@
+{
+  "name": "Cartable IPSA",
+  "short_name": "Cartable",
+  "description": "Ton cartable de cours : notes, fiches et trousse par matière.",
+  "id": "./",
+  "start_url": "./?source=app",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "lang": "fr",
+  "theme_color": "#1D6B52",
+  "background_color": "#F3F5F1",
+  "icons": [
+    { "src": "icons/cartable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/cartable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/cartable-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
